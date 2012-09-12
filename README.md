@@ -1,8 +1,5 @@
-moodle-local_technicalsignals
-=============================
-
 Local Technical Signals
-#######################
+=======================
 
 This simple plugins provides an easy mean to display service messages to all users without taking over
 the moodle screen.
@@ -22,7 +19,7 @@ GREEN : Positive message
 CYAN : Information notice
 
 Versions
-########
+==========
 
 Original code reference is on 
 http://github.com/vfremaux/moodle-local_technicalsignals
@@ -32,12 +29,12 @@ Branch : master for version 2.x > 2.2 (should work on 2.1)
 No packaged version for 1.9
 
 Install
-#######
+=========
  
 Installs in the "local" standard customisation directory
  
 How to make it work locally:
-############################
+==============================
 
 you just need to have in your curent theme an inclusion to
 
@@ -50,7 +47,7 @@ local_print_administrator_message();
 Just after the "<BODY>" tag of your layout. 
  
 How to make it work in Moodle Network:
-######################################
+======================================
 
 you need : 
 
