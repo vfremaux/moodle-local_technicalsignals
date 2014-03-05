@@ -5,7 +5,7 @@ if ($hassiteconfig) { // needs this condition or there is error on login page
     $settings = new admin_settingpage('local_technicalsignals', get_string('pluginname', 'local_technicalsignals'));
     $ADMIN->add('localplugins', $settings);
 
-	$settings->add(new admin_setting_configtext('adminmessage', get_string('adminmessage', 'local_technicalsignals'), get_string('adminmessagedesc', 'local_technicalsignals'), '', PARAM_TEXT));
+	$settings->add(new admin_setting_configtext('adminmessage', get_string('adminmessage', 'local_technicalsignals'), get_string('adminmessagedesc', 'local_technicalsignals'), '', PARAM_CLEANHTML));
 	$coloropts['#FD6060'] = get_string('red', 'local_technicalsignals');
 	$coloropts['#FBC962'] = get_string('orange', 'local_technicalsignals');
 	$coloropts['#F5FD60'] = get_string('yellow', 'local_technicalsignals');
