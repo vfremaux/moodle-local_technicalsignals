@@ -16,3 +16,5 @@ $string['yellow'] = 'Yellow';
 $string['green'] = 'Green';
 $string['blue'] = 'Blue';
 $string['technicalsignals:manage'] = 'Manage technical signals';
+$string['remove'] = 'Erase signal';
+
