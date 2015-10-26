@@ -3,9 +3,9 @@ defined('MOODLE_INTERNAL') || die;
 
 if ($hassiteconfig) {
     $settings = new admin_settingpage('localtechnicalsignals', get_string('pluginname', 'local_technicalsignals'), 'local/technicalsignals:manage');
-    
+
     $ADMIN->add('localplugins', $settings);
-    
+
     $settings->add(new admin_setting_configtext('adminmessage', get_string('adminmessage', 'local_technicalsignals'), get_string('adminmessagedesc', 'local_technicalsignals'), '', PARAM_CLEANHTML));
     $coloropts['#FD6060'] = get_string('red', 'local_technicalsignals');
     $coloropts['#FBC962'] = get_string('orange', 'local_technicalsignals');
