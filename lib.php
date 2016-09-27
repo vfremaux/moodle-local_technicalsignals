@@ -14,13 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+defined('MOODLE_EARLY_INTERNAL') || die('Early internal');
+
 /**
  * @package   local_technicalsignals
+ * @category  local
  * @copyright 2008 Valery Fremaux (valery.fremaux@gmail.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-if (!function_exists('local_print_administrator_message')) {
 /**
  * prints an administrator message in the screen where called. 
  * usually called as first prints of the body in theme header.
@@ -88,6 +90,4 @@ function local_print_administrator_message($return = false) {
 
     if ($return) return $str;
     echo $str;
-}
-
 }
