@@ -21,4 +21,10 @@ $string['yellow'] = 'Yellow';
 $string['green'] = 'Green';
 $string['blue'] = 'Blue';
 $string['remove'] = 'Erase signal';
+$string['always'] = 'Always';
+$string['onehour'] = 'One hour';
+$string['threehours'] = 'Three hours';
+$string['twelvehours'] = 'Twelve hours';
+$string['oneday'] = 'One day';
+$string['threedays'] = 'Three days';
 
