@@ -16,6 +16,7 @@
 
 /**
  * @package   local_technicalsignals
+ * @category  local
  * @copyright 2008 Valery Fremaux (valery.fremaux@gmail.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -24,6 +25,7 @@ require('../../config.php');
 
 $returnurl = required_param('returnurl', PARAM_URL);
 
+// Security.
 
 require_login();
 require_capability('local/technicalsignals:manage', context_system::instance());
