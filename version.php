@@ -15,22 +15,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
- *
- * @package     local_tabbedquickform
- * @category    local
- * @author      Valery Fremaux <valery.fremaux@gmail.com>
- * @copyright   2016 onwards Valery Fremaux (http://www.mylearningfactory.com)
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    local_technicalsignals
+ * @category   local
+ * @author     Valery Fremaux <valery.fremaux@gmail.com>
+ * @copyright  2009 onwards Valery Fremaux (http://www.mylearningfactory.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->version  = 2015062400;   // The (date) version of this plugin.
-$plugin->requires = 2014110400;   // Requires this Moodle version.
-$plugin->release = '2.8.0 (Build 2015062400)';
+$plugin->requires = 2015050500;   // Requires this Moodle version.
+$plugin->release = '2.9.0 (Build 2015062400)';
 $plugin->maturity = MATURITY_STABLE;
 $plugin->component = 'local_technicalsignals';
 
 // Non moodle attributes.
-$plugin->codeincrement = '2.8.0000';
+$plugin->codeincrement = '2.9.0000';
