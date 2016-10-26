@@ -16,13 +16,13 @@
 // The commands in here will all be database-neutral,
 // using the functions defined in lib/ddllib.php
 
-function xmldb_local_technicalsignals_upgrade($oldversion=0) {
+defined('MOODLE_INTERNAL') || die();
 
-    global $CFG, $THEME, $DB;
+function xmldb_local_technicalsignals_upgrade($oldversion = 0) {
 
     $result = true;
 
-	// Moodle 2.0 break line
-    
+    // Moodle 2.0 break line.
+
     return $result;
 }
