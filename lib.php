@@ -16,11 +16,15 @@
 
 /**
  * @package   local_technicalsignals
+ * @category  local
  * @copyright 2008 Valery Fremaux (valery.fremaux@gmail.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+// This is a bit more complex security resolution for script that may be called before setup.php.
+if (!defined('MOODLE_EARLY_INTERNAL')) {
+    defined('MOODLE_INTERNAL') || die();
+}
 
-if (!function_exists('local_print_administrator_message')) {
 /**
  * prints an administrator message in the screen where called. 
  * usually called as first prints of the body in theme header.
@@ -29,7 +33,7 @@ if (!function_exists('local_print_administrator_message')) {
  * @uses configuration mainhostprefix for network extension
  */
 function local_print_administrator_message($return = false) {
-    global $CFG, $DB, $OUTPUT;
+    global $CFG, $DB, $OUTPUT, $PAGE;
 
     $str = '';
 
@@ -59,9 +63,12 @@ function local_print_administrator_message($return = false) {
                 wwwroot LIKE ?
         ";
         if (!$mainhost = $DB->get_record_sql($sql, array($CFG->mainhostprefix.'%'))) {
-            // echo $OUTPUT->notification(get_string('undefinedmainhost', 'local_technicalsignals', $CFG->mainhostprefix));
+            if (debugging()) {
+                echo $OUTPUT->notification(get_string('undefinedmainhost', 'local_technicalsignals', $CFG->mainhostprefix));
+            }
         }
-        if (@$mainhost->wwwroot != $CFG->wwwroot) {
+        if ((@$mainhost->wwwroot != $CFG->wwwroot) && ($PAGE->pagetype != 'admin-mnet-peers')) {
+            // Protect the mnet peer page.
             if ($text = vmoodle_get_remote_config($mainhost, 'globaladminmessage')) {
                 $color = vmoodle_get_remote_config($mainhost, 'globaladminmessagecolor');
             }
@@ -86,8 +93,8 @@ function local_print_administrator_message($return = false) {
         $str = '<div class="administratormessage" style="background-color:'.$CFG->adminmessagecolor.'">'.$CFG->adminmessage.$removediv.'</div>';
     }
 
-    if ($return) return $str;
+    if ($return) {
+        return $str;
+    }
     echo $str;
-}
-
 }
