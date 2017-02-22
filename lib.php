@@ -37,11 +37,13 @@ function local_print_administrator_message($return = false) {
 
     $str = '';
 
-    // protects some special scripts such as theme
-    if (defined('ABORT_AFTER_CONFIG')) return '';
+    // Protects some special scripts such as theme.
+    if (defined('ABORT_AFTER_CONFIG')) {
+        return '';
+    }
 
     // Protect against some network back calls.
-    if (defined('MNET_SERVER')){
+    if (defined('MNET_SERVER')) {
         return;
     }
 
