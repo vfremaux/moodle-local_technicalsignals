@@ -41,7 +41,7 @@ function local_print_administrator_message($return = false) {
     if (defined('ABORT_AFTER_CONFIG')) return '';
 
     // Protect against some network back calls.
-    if (defined('MNET_SERVER')){
+    if (defined('MNET_SERVER')) {
         return;
     }
 
