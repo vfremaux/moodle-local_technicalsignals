@@ -43,13 +43,13 @@ function local_print_administrator_message($return = false) {
     }
 
     // Protect against some network back calls.
-    if (defined('MNET_SERVER')){
+    if (defined('MNET_SERVER')) {
         return;
     }
 
     // Network admin meesage needs MNET structure to be defined.
-    if (!empty($CFG->mainhostprefix) && file_exists($CFG->dirroot.'/blocks/vmoodle/plugins/generic/lib.php')) {
-        require_once($CFG->dirroot.'/blocks/vmoodle/plugins/generic/lib.php');
+    if (!empty($CFG->mainhostprefix) && file_exists($CFG->dirroot.'/local/vmoodle/plugins/generic/lib.php')) {
+        require_once($CFG->dirroot.'/local/vmoodle/plugins/generic/lib.php');
 
         // Get the mnet host that is considered as master.
         $sql = "
@@ -69,7 +69,8 @@ function local_print_administrator_message($return = false) {
                 echo $OUTPUT->notification(get_string('undefinedmainhost', 'local_technicalsignals', $CFG->mainhostprefix));
             }
         }
-        if ((@$mainhost->wwwroot != $CFG->wwwroot) && ($PAGE->pagetype != 'admin-mnet-peers')) {
+
+        if (($CFG->mnet_dispatcher_mode == 'strict') && (@$mainhost->wwwroot != $CFG->wwwroot) && ($PAGE->pagetype != 'admin-mnet-peers')) {
             // Protect the mnet peer page.
             if ($text = vmoodle_get_remote_config($mainhost, 'globaladminmessage')) {
                 $color = vmoodle_get_remote_config($mainhost, 'globaladminmessagecolor');
