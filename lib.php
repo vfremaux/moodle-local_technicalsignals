@@ -26,7 +26,7 @@ if (!defined('MOODLE_EARLY_INTERNAL')) {
 }
 
 /**
- * prints an administrator message in the screen where called. 
+ * prints an administrator message in the screen where called.
  * usually called as first prints of the body in theme header.
  *
  * @uses configuration key globaladminmessage and globaladminmessagecolor
@@ -37,8 +37,10 @@ function local_print_administrator_message($return = false) {
 
     $str = '';
 
-    // protects some special scripts such as theme
-    if (defined('ABORT_AFTER_CONFIG')) return '';
+    // Protects some special scripts such as theme.
+    if (defined('ABORT_AFTER_CONFIG')) {
+        return '';
+    }
 
     // Protect against some network back calls.
     if (defined('MNET_SERVER')) {
@@ -46,8 +48,8 @@ function local_print_administrator_message($return = false) {
     }
 
     // Network admin meesage needs MNET structure to be defined.
-    if (!empty($CFG->mainhostprefix) && file_exists($CFG->dirroot.'/blocks/vmoodle/plugins/generic/lib.php')){
-        require_once $CFG->dirroot.'/blocks/vmoodle/plugins/generic/lib.php';
+    if (!empty($CFG->mainhostprefix) && file_exists($CFG->dirroot.'/local/vmoodle/plugins/generic/lib.php')) {
+        require_once($CFG->dirroot.'/local/vmoodle/plugins/generic/lib.php');
 
         // Get the mnet host that is considered as master.
         $sql = "
@@ -67,7 +69,8 @@ function local_print_administrator_message($return = false) {
                 echo $OUTPUT->notification(get_string('undefinedmainhost', 'local_technicalsignals', $CFG->mainhostprefix));
             }
         }
-        if ((@$mainhost->wwwroot != $CFG->wwwroot) && ($PAGE->pagetype != 'admin-mnet-peers')) {
+
+        if (($CFG->mnet_dispatcher_mode == 'strict') && (@$mainhost->wwwroot != $CFG->wwwroot) && ($PAGE->pagetype != 'admin-mnet-peers')) {
             // Protect the mnet peer page.
             if ($text = vmoodle_get_remote_config($mainhost, 'globaladminmessage')) {
                 $color = vmoodle_get_remote_config($mainhost, 'globaladminmessagecolor');
@@ -85,12 +88,14 @@ function local_print_administrator_message($return = false) {
     $removediv = '';
     if (has_capability('local/technicalsignals:manage', context_system::instance())) {
         $eraseurl = new moodle_url('/local/technicalsignals/resetmessage.php', array('returnurl' => me()));
-        $removediv = '<div class="administratormessageerase"><a href="'.$eraseurl.'"><input type="button" name="go_erase" value="'.get_string('remove', 'local_technicalsignals').'"></a></div>';
+        $button = '<input type="button" name="go_erase" value="'.get_string('remove', 'local_technicalsignals').'" />';
+        $removediv = '<div class="administratormessageerase"><a href="'.$eraseurl.'">'.$button.'</a></div>';
     }
 
     // Local messaging.
     if (!empty($CFG->adminmessage)) {
-        $str = '<div class="administratormessage" style="background-color:'.$CFG->adminmessagecolor.'">'.$CFG->adminmessage.$removediv.'</div>';
+        $style = 'background-color:'.$CFG->adminmessagecolor;
+        $str = '<div class="administratormessage" style="'.$style.'">'.$CFG->adminmessage.$removediv.'</div>';
     }
 
     if ($return) {
