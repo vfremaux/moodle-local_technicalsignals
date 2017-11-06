@@ -69,7 +69,8 @@ function local_print_administrator_message($return = false) {
                 echo $OUTPUT->notification(get_string('undefinedmainhost', 'local_technicalsignals', $CFG->mainhostprefix));
             }
         }
-        if ((@$mainhost->wwwroot != $CFG->wwwroot) && ($PAGE->pagetype != 'admin-mnet-peers')) {
+
+        if (($CFG->mnet_dispatcher_mode == 'strict') && (@$mainhost->wwwroot != $CFG->wwwroot) && ($PAGE->pagetype != 'admin-mnet-peers')) {
             // Protect the mnet peer page.
             if ($text = vmoodle_get_remote_config($mainhost, 'globaladminmessage')) {
                 $color = vmoodle_get_remote_config($mainhost, 'globaladminmessagecolor');
