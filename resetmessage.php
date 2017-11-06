@@ -30,6 +30,9 @@ $returnurl = required_param('returnurl', PARAM_URL);
 require_login();
 require_capability('local/technicalsignals:manage', context_system::instance());
 
+$oldvalue = get_config('core', 'adminmessage');
+
 set_config('adminmessage', '');
+add_to_config_log('adminmessage', $oldvalue, '');
 
 redirect($returnurl);
