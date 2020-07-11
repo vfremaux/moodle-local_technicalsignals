@@ -1,0 +1,29 @@
+
+
+<!-- local_technicalsignals/technicalsignal -->
+{{#globaladminmessage}}
+<div class="global administratormessage" style="background-color:{{color}}">{{{globalmessagestr}}}: {{text}}
+{{#globalcanremove}}
+    <span class="administratormessageerase">
+        <a href="{{{globaleraseurl}}}">{{{deleteicon}}}</a>
+    </span>
+{{/globalcanremove}}
+</div>
+{{/globaladminmessage}}
+
+{{#adminmessage}}
+<div class="administratormessage" style="{{style}}">{{adminmessage}} 
+{{#canremove}}
+    <span class="administratormessageerase">
+        <a href="{{{eraseurl}}}">{{{deleteicon}}}</a>
+    </span>
+{{/canremove}}
+</div>
+{{/adminmessage}}
+
+{{#inframessage}}
+<div class="inframessage" style="{{style}}">
+    {{#str}}inframessageprefix, local_technicalsignals{{/str}} {{inframessage}}
+</div>
+{{/inframessage}}
+<!-- /local_technicalsignals/technicalsignal -->

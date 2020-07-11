@@ -24,15 +24,21 @@
 require('../../config.php');
 
 $returnurl = required_param('returnurl', PARAM_URL);
+$global = optional_param('global', 0, PARAM_BOOL);
 
 // Security.
 
 require_login();
 require_capability('local/technicalsignals:manage', context_system::instance());
 
-$oldvalue = get_config('core', 'adminmessage');
-
-set_config('adminmessage', '');
-add_to_config_log('adminmessage', $oldvalue, '');
+if ($global) {
+    $oldvalue = get_config('core', 'globaladminmessagecolor');
+    set_config('globaladminmessagecolor', 0);
+    add_to_config_log('globaladminmessagecolor', $oldvalue, '', 'moodle');
+} else {
+    $oldvalue = get_config('core', 'adminmessagecolor');
+    set_config('adminmessagecolor', 0);
+    add_to_config_log('adminmessagecolor', $oldvalue, '', 'moodle');
+}
 
 redirect($returnurl);

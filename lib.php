@@ -26,16 +26,28 @@ if (!defined('MOODLE_EARLY_INTERNAL')) {
 }
 
 /**
+ * This function is not implemented in this plugin, but is needed to mark
+ * the vf documentation custom volume availability.
+ */
+function local_technicalsignals_supports_feature() {
+    assert(1);
+}
+
+/**
  * prints an administrator message in the screen where called.
  * usually called as first prints of the body in theme header.
  *
  * @uses configuration key globaladminmessage and globaladminmessagecolor
  * @uses configuration mainhostprefix for network extension
  */
-function local_print_administrator_message($return = false) {
+function local_print_administrator_message() {
     global $CFG, $DB, $OUTPUT, $PAGE;
 
-    $str = '';
+    $colors['red'] = '#fd6060';
+    $colors['orange'] = '#fBc962';
+    $colors['yellow'] = '#f5fd60';
+    $colors['green'] = '#72ff5e';
+    $colors['blue'] = '#5ee2ff';
 
     // Protects some special scripts such as theme.
     if (defined('ABORT_AFTER_CONFIG')) {
@@ -47,8 +59,11 @@ function local_print_administrator_message($return = false) {
         return;
     }
 
-    // Network admin meesage needs MNET structure to be defined.
-    if (!empty($CFG->mainhostprefix) && file_exists($CFG->dirroot.'/local/vmoodle/plugins/generic/lib.php')) {
+    $template = new StdClass;
+
+    // Network admin message needs MNET structure to be defined.
+    if (!empty($CFG->mainhostprefix) && file_exists($CFG->dirroot.'/local/vmoodle/plugins/generic/lib.php') && ($CFG->mnet_dispatcher_mode == 'strict')) {
+
         require_once($CFG->dirroot.'/local/vmoodle/plugins/generic/lib.php');
 
         // Get the mnet host that is considered as master.
@@ -66,40 +81,72 @@ function local_print_administrator_message($return = false) {
         ";
         if (!$mainhost = $DB->get_record_sql($sql, array($CFG->mainhostprefix.'%'))) {
             if (debugging()) {
-                echo $OUTPUT->notification(get_string('undefinedmainhost', 'local_technicalsignals', $CFG->mainhostprefix));
+                return $OUTPUT->notification(get_string('undefinedmainhost', 'local_technicalsignals', $CFG->mainhostprefix));
             }
         }
 
-        if (($CFG->mnet_dispatcher_mode == 'strict') && (@$mainhost->wwwroot != $CFG->wwwroot) && ($PAGE->pagetype != 'admin-mnet-peers')) {
+        if ((@$mainhost->wwwroot != $CFG->wwwroot) &&
+                        ($PAGE->pagetype != 'admin-mnet-peers')) {
+            $islocal = false;
             // Protect the mnet peer page.
-            if ($text = vmoodle_get_remote_config($mainhost, 'globaladminmessage')) {
-                $color = vmoodle_get_remote_config($mainhost, 'globaladminmessagecolor');
+            if ($color = vmoodle_get_remote_config($mainhost, 'globaladminmessagecolor')) {
+                $text = vmoodle_get_remote_config($mainhost, 'globaladminmessage');
             }
         } else {
+            $islocal = true;
             $text = @$CFG->globaladminmessage;
             $color = @$CFG->globaladminmessagecolor;
         }
-        if (!empty($text)) {
+        if (!empty($color) && !empty($text)) {
+            $template->globaladminmessage = true;
             $globalmessagestr = get_string('globalmessageprefix', 'local_technicalsignals');
-            $str = '<div class="administratormessage" style="background-color:'.$color.'">'.$globalmessagestr.': '.$text.'</div>';
+            $template->globalmessagestr = $globalmessagestr;
+            $template->color = $color;
+            $template->text = $text;
+
+            if ($islocal) {
+                if (has_capability('local/technicalsignals:manage', context_system::instance())) {
+                    $template->globalcanremove = true;
+                    $template->deleteicon = $OUTPUT->pix_icon('t/delete', get_string('remove', 'local_technicalsignals'));
+                    $params = array('returnurl' => me(), 'global' => 1);
+                    $eraseurl = new moodle_url('/local/technicalsignals/resetmessage.php', $params);
+                    $template->globaleraseurl = $eraseurl;
+                }
+            }
         }
     }
 
-    $removediv = '';
-    if (has_capability('local/technicalsignals:manage', context_system::instance())) {
-        $eraseurl = new moodle_url('/local/technicalsignals/resetmessage.php', array('returnurl' => me()));
-        $button = '<input type="button" name="go_erase" value="'.get_string('remove', 'local_technicalsignals').'" />';
-        $removediv = '<div class="administratormessageerase"><a href="'.$eraseurl.'">'.$button.'</a></div>';
-    }
-
     // Local messaging.
-    if (!empty($CFG->adminmessage)) {
-        $style = 'background-color:'.$CFG->adminmessagecolor;
-        $str = '<div class="administratormessage" style="'.$style.'">'.$CFG->adminmessage.$removediv.'</div>';
+    if (!empty($CFG->adminmessagecolor) && !empty($CFG->adminmessage)) {
+        $template->style = 'background-color:'.$CFG->adminmessagecolor;
+        $template->adminmessage = $CFG->adminmessage;
+        if (has_capability('local/technicalsignals:manage', context_system::instance())) {
+            $template->canremove = true;
+            $template->deleteicon = $OUTPUT->pix_icon('t/delete', get_string('remove', 'local_technicalsignals'));
+            $eraseurl = new moodle_url('/local/technicalsignals/resetmessage.php', array('returnurl' => me()));
+            $template->eraseurl = $eraseurl;
+        }
     }
 
-    if ($return) {
-        return $str;
+    // Infra messaging.
+     if (!empty($CFG->inframessagelocation)) {
+        if (is_file($CFG->inframessagelocation) && is_readable($CFG->inframessagelocation)) {
+            $inframessage = implode('', file($CFG->inframessagelocation));
+            if (!empty($inframessage)) {
+                if (preg_match('/^([^|]*?)\\|(.*)$/', $inframessage, $matches)) {
+                    if (in_array($matches[1], array_keys($colors))) {
+                        $template->style = 'background-color:'.$colors[$matches[1]];
+                    } else {
+                        $template->style = 'background-color: '.$colors['red'];
+                    }
+                    $inframessage = $matches[2];
+                } else {
+                    $template->style = 'background-color: '.$colors['red'];
+                }
+                $template->inframessage = $inframessage;
+            }
+        }
     }
-    echo $str;
+
+    return $OUTPUT->render_from_template('local_technicalsignals/technicalsignal', $template);
 }
