@@ -28,18 +28,15 @@ $string['technicalsignals:manage'] = 'Gérer la signalisation technique';
 
 $string['pluginname'] = 'Notifications techniques d\'exploitation';
 
-$string['configadminmessage'] = 'Message administrateur';
-$string['configadminmessage_desc'] = 'Message administrateur affiché en haut d\'écran. Laisser vide pour désactiver';
-$string['configadminmessagecolor'] = 'Couleur de message administrateur';
-$string['configadminmessageholdtime'] = 'Temps de présentation';
+$string['adminmessage'] = 'Message administrateur';
+$string['adminmessagedesc'] = 'Message administrateur affiché en haut d\'écran. Laisser vide pour désactiver';
+$string['adminmessagecolor'] = 'Couleur de message administrateur';
+$string['adminmessageholdtime'] = 'Temps de présentation';
 $string['exploitation'] = 'Exploitation';
-$string['configglobaladminmessage'] = 'Message global au réseau';
-$string['configglobaladminmessage_desc'] = 'Message administrateur affiché en haut d\'écran sur TOUTES les plates-formes du réseau. Laisser vide pour désactiver';
-$string['configglobaladminmessagecolor'] = 'Couleur de message réseau';
-$string['configglobaladminmessageholdtime'] = 'Temps de présentation du message global';
-$string['configinframessagelocation'] = 'Position du message de niveau "infra"';
-$string['configinframessagelocation_desc'] = 'Si le fichier existe (UTF-8) alors son contenu sera ajouté à la notification d\'information. Il devrait être placé dans un endroit que toutes les instances locales de moodle peuvent atteindre.';
-$string['inframessageprefix'] = '<b>Service d\'infrastructure</b> ';
+$string['globaladminmessage'] = 'Message global au réseau';
+$string['globaladminmessagedesc'] = 'Message administrateur affiché en haut d\'écran sur TOUTES les plates-formes du réseau. Laisser vide pour désactiver';
+$string['globaladminmessagecolor'] = 'Couleur de message réseau';
+$string['globaladminmessageholdtime'] = 'Temps de présentation du message global';
 $string['globalmessageprefix'] = '<b>Message de service global</b> (toutes plates-formes) ';
 $string['hide'] = 'Cacher le message';
 $string['undefinedmainhost'] = 'Aucun hôte principal ne répond au préfixe : {$a}. Vérifiez que la valeur de préfixe commence par http:// (ou https://). Elle peut être définie par le bloc Publication de cours, ou directement dans le fichier de configuration par défaut.';

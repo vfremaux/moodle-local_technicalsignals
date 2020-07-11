@@ -43,12 +43,6 @@ function local_technicalsignals_supports_feature() {
 function local_print_administrator_message() {
     global $CFG, $DB, $OUTPUT, $PAGE;
 
-    $colors['red'] = '#fd6060';
-    $colors['orange'] = '#fBc962';
-    $colors['yellow'] = '#f5fd60';
-    $colors['green'] = '#72ff5e';
-    $colors['blue'] = '#5ee2ff';
-
     // Protects some special scripts such as theme.
     if (defined('ABORT_AFTER_CONFIG')) {
         return '';
@@ -125,26 +119,6 @@ function local_print_administrator_message() {
             $template->deleteicon = $OUTPUT->pix_icon('t/delete', get_string('remove', 'local_technicalsignals'));
             $eraseurl = new moodle_url('/local/technicalsignals/resetmessage.php', array('returnurl' => me()));
             $template->eraseurl = $eraseurl;
-        }
-    }
-
-    // Infra messaging.
-     if (!empty($CFG->inframessagelocation)) {
-        if (is_file($CFG->inframessagelocation) && is_readable($CFG->inframessagelocation)) {
-            $inframessage = implode('', file($CFG->inframessagelocation));
-            if (!empty($inframessage)) {
-                if (preg_match('/^([^|]*?)\\|(.*)$/', $inframessage, $matches)) {
-                    if (in_array($matches[1], array_keys($colors))) {
-                        $template->style = 'background-color:'.$colors[$matches[1]];
-                    } else {
-                        $template->style = 'background-color: '.$colors['red'];
-                    }
-                    $inframessage = $matches[2];
-                } else {
-                    $template->style = 'background-color: '.$colors['red'];
-                }
-                $template->inframessage = $inframessage;
-            }
         }
     }
 

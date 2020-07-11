@@ -27,63 +27,55 @@ defined('MOODLE_INTERNAL') || die;
 
 // Settings default init.
 
+if (is_dir($CFG->dirroot.'/local/adminsettings')) {
+
+    // Integration driven code.
+    require_once($CFG->dirroot.'/local/adminsettings/lib.php');
+    list($hasconfig, $hassiteconfig, $capability) = local_adminsettings_access();
+} else {
+    // Standard Moodle code.
+    $capability = 'moodle/site:config';
+    $hasconfig = $hassiteconfig = has_capability($capability, context_system::instance());
+}
+
 if ($hassiteconfig) {
     $label = get_string('pluginname', 'local_technicalsignals');
     $settings = new admin_settingpage('localtechnicalsignals', $label, 'local/technicalsignals:manage');
 
     $ADMIN->add('localplugins', $settings);
 
-    $key = 'adminmessage';
-    $label = get_string('configadminmessage', 'local_technicalsignals');
-    $desc = get_string('configadminmessage_desc', 'local_technicalsignals');
-    $settings->add(new admin_setting_configtext($key, $label, $desc, '', PARAM_TEXT));
+    $label = get_string('adminmessage', 'local_technicalsignals');
+    $desc = get_string('adminmessagedesc', 'local_technicalsignals');
+    $settings->add(new admin_setting_configtext('adminmessage', $label, $desc, '', PARAM_CLEANHTML));
 
-    $key = 'adminmessagecolor';
     $coloropts['0'] = get_string('hide', 'local_technicalsignals');
     $coloropts['#FD6060'] = get_string('red', 'local_technicalsignals');
     $coloropts['#FBC962'] = get_string('orange', 'local_technicalsignals');
     $coloropts['#F5FD60'] = get_string('yellow', 'local_technicalsignals');
     $coloropts['#72FF5E'] = get_string('green', 'local_technicalsignals');
     $coloropts['#5EE2FF'] = get_string('blue', 'local_technicalsignals');
-    $label = get_string('configadminmessagecolor', 'local_technicalsignals');
-    $settings->add(new admin_setting_configselect($key, $label, '', '#FD6060', $coloropts));
+    $label = get_string('adminmessagecolor', 'local_technicalsignals');
+    $settings->add(new admin_setting_configselect('adminmessagecolor', $label, '', '#FD6060', $coloropts));
 
-    $key = 'adminmessageholdtime';
     $holdtimeopts = array();
     $holdtimeopts[0] = get_string('always', 'local_technicalsignals');
     $holdtimeopts[time() + HOURSECS] = get_string('onehour', 'local_technicalsignals');
     $holdtimeopts[time() + HOURSECS * 12] = get_string('twelvehours', 'local_technicalsignals');
     $holdtimeopts[time() + DAYSECS] = get_string('oneday', 'local_technicalsignals');
     $holdtimeopts[time() + DAYSECS * 3] = get_string('threedays', 'local_technicalsignals');
-    $label = get_string('configadminmessageholdtime', 'local_technicalsignals');
-    $desc = '';
-    $default = 'always';
-    $settings->add(new admin_setting_configselect($key, $label, $desc, $default, $holdtimeopts));
+    $label = get_string('adminmessageholdtime', 'local_technicalsignals');
+    $settings->add(new admin_setting_configselect('adminmessageholdtime', $label, '', 'always', $holdtimeopts));
 
     // This is an acceptable heuristic of which is the leader of a VMoodle network.
     if (@$CFG->vmasterdbname == $CFG->dbname) {
-        $key = 'globaladminmessage';
-        $label = get_string('configglobaladminmessage', 'local_technicalsignals');
-        $desc = get_string('configadminmessage_desc', 'local_technicalsignals');
-        $default = '';
-        $settings->add(new admin_setting_configtext($key, $label, $desc, $default, PARAM_TEXT));
+        $label = get_string('globaladminmessage', 'local_technicalsignals');
+        $desc = get_string('adminmessagedesc', 'local_technicalsignals');
+        $settings->add(new admin_setting_configtext('globaladminmessage', $label, $desc, '', PARAM_CLEANHTML));
 
-        $key = 'globaladminmessagecolor';
-        $label = get_string('configglobaladminmessagecolor', 'local_technicalsignals');
-        $desc = '';
-        $default = '#fd6060';
-        $settings->add(new admin_setting_configselect($key, $label, $desc, $default, $coloropts));
+        $label = get_string('globaladminmessagecolor', 'local_technicalsignals');
+        $settings->add(new admin_setting_configselect('globaladminmessagecolor', $label, '', '#FD6060', $coloropts));
 
-        $key = 'globaladminmessageholdtime';
-        $label = get_string('configglobaladminmessageholdtime', 'local_technicalsignals');
-        $desc = '';
-        $default = 'always';
-        $settings->add(new admin_setting_configselect($key, $label, $desc, $default, $holdtimeopts));
+        $label = get_string('globaladminmessageholdtime', 'local_technicalsignals');
+        $settings->add(new admin_setting_configselect('globaladminmessageholdtime', $label, '', 'always', $holdtimeopts));
     }
-
-    $key = 'inframessagelocation';
-    $label = get_string('configinframessagelocation', 'local_technicalsignals');
-    $desc = get_string('configinframessagelocation_desc', 'local_technicalsignals');
-    $default = '/var/www/moodle_infra.txt';
-    $settings->add(new admin_setting_configtext($key, $label, $desc, $default, PARAM_TEXT));
 }
