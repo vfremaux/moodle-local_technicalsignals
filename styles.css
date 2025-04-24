@@ -1,13 +1,15 @@
-.administratormessage {
-    padding:2px 2px 2px 10px;font-size:10px;
-    font-size:1.2em;
+.administratormessage,
+.inframessage {
+    padding: 2px 2px 2px 10px;
+    font-size: 1.2em;
 }
 
 .administratormessageerase {
-    float:right;
+    margin-left: 40px;
 }
 
 .administratormessageerase input {
-    padding:2px !important;
-    margin:0px !important;
+    padding: 2px !important;
+    margin: 0 !important;
+    font-size: 0.6em;
 }

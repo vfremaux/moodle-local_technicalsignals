@@ -14,22 +14,18 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * @package    local_technicalsignals
- * @category   local
- * @author     Valery Fremaux <valery.fremaux@gmail.com>
- * @copyright  2009 onwards Valery Fremaux (http://www.mylearningfactory.com)
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+namespace local_technicalsignals\privacy;
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2025010305;   // The (date) version of this plugin.
-$plugin->requires = 2022112801;   // Requires this Moodle version.
-$plugin->release = '4.5.0 (Build 2015062400)';
-$plugin->maturity = MATURITY_STABLE;
-$plugin->component = 'local_technicalsignals';
-$plugin->supported = [401, 405];
-
-// Non moodle attributes.
-$plugin->codeincrement = '4.5.0001';
+class provider implements \core_privacy\local\metadata\null_provider {
+    /**
+     * Get the language string identifier with the component's language
+     * file to explain why this plugin stores no data.
+     *
+     * @return  string
+     */
+    public static function get_reason() : string {
+        return 'privacy:metadata';
+    }
+}
